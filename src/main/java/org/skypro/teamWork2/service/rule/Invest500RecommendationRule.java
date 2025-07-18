@@ -1,5 +1,6 @@
 package org.skypro.teamWork2.service.rule;
 
+import org.skypro.teamWork2.model.enums.RecommendedProduct;
 import org.skypro.teamWork2.repository.ProductRepository;
 import org.skypro.teamWork2.model.ProductDescriptions;
 import org.skypro.teamWork2.model.ProductRecommendation;
@@ -29,10 +30,7 @@ public class Invest500RecommendationRule implements RecommendationRule {
 
         if(usesDebit && !usesInvest && savingDeposits.compareTo(new BigDecimal(1000))>0){
             logger.info("Recommending Invest500 for user: {}", userId);
-            return Optional.of(new ProductRecommendation(
-                    "Invest500",
-                    UUID.fromString("147f6a0f-3b91-413b-ab99-87f081d60d5a"),
-                    ProductDescriptions.INVEST_500));
+            return Optional.of(RecommendedProduct.INVEST_500.getDto());
         }
         return Optional.empty();
     }

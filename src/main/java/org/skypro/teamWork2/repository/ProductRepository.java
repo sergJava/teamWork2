@@ -49,7 +49,7 @@ public class ProductRepository {
         return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId, productType.getDbValue(), TransactionType.DEPOSIT.getDbValue());
     }
 
-    public BigDecimal getTotalWithdrawalsByProductType(UUID userId, ProductType productType) {
+    public BigDecimal getTotalExpensesByProductType(UUID userId, ProductType productType) {
         String sql = """
                 SELECT COALESCE(SUM(t.amount), 0)
                 FROM transactions t
