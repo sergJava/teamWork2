@@ -1,5 +1,7 @@
 package org.skypro.teamWork2.repository;
 
+import org.skypro.teamWork2.model.enums.ProductType;
+import org.skypro.teamWork2.model.enums.TransactionType;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -23,33 +25,37 @@ public class ProductRepository {
         return result != null ? result : 0;
     }
 
-    public boolean userHasProductOfType(UUID userId, String productType) {
+    public boolean userHasProductOfType(UUID userId, ProductType productType) {
         String sql = """
                 SELECT COUNT(*) > 0
-                FROM transaction t
+                FROM transactions t
                 INNER JOIN products p ON t.product_id = p.id
                 WHERE t.user_id = ? AND p.type = ?
                 """;
-        return jdbcTemplate.queryForObject(sql, Boolean.class, userId, productType);
+        return jdbcTemplate.queryForObject(sql,
+                Boolean.class,
+                userId,
+                productType.getDbValue()
+        );
     }
 
-    public BigDecimal getTotalDepositsByProductType(UUID userId, String productType) {
+    public BigDecimal getTotalDepositsByProductType(UUID userId, ProductType productType) {
         String sql = """
                 SELECT COALESCE(SUM(t.amount), 0)
-                FROM transaction t
+                FROM transactions t
                 INNER JOIN products p ON t.product_id = p.id
-                WHERE t.user_id = ? AND p.type = ? AND t.type = "DEPOSIT"
+                WHERE t.user_id = ? AND p.type = ? AND t.type = ?
                 """;
-        return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId, productType);
+        return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId, productType.getDbValue(), TransactionType.DEPOSIT.getDbValue());
     }
 
-    public BigDecimal getTotalExpensesByProductType(UUID userId, String productType) {
+    public BigDecimal getTotalWithdrawalsByProductType(UUID userId, ProductType productType) {
         String sql = """
                 SELECT COALESCE(SUM(t.amount), 0)
-                FROM transaction t
+                FROM transactions t
                 INNER JOIN products p ON t.product_id = p.id
-                WHERE t.user_id = ? AND p.type = ? AND t.type = "WITHDRAW"
+                WHERE t.user_id = ? AND p.type = ? AND t.type = ?
                 """;
-        return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId, productType);
+        return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId, productType.getDbValue(), TransactionType.WITHDRAW.getDbValue());
     }
 }

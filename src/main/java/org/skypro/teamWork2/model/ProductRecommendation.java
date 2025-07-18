@@ -1,4 +1,4 @@
-package org.skypro.teamWork2.util;
+package org.skypro.teamWork2.model;
 
 import java.util.UUID;
 
