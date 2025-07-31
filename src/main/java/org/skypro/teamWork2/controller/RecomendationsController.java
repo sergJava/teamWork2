@@ -23,9 +23,4 @@ public class RecomendationsController {
     public ResponseEntity<RecommendationResponse> getRecommendations(@PathVariable UUID userId){
         return ResponseEntity.ok(recommendationService.getRecommendations(userId));
     }
-
-//    @GetMapping("/get-random-transaction-amount/{userId}")
-//    public ResponseEntity<Integer> getRandomTransactionAmount(@PathVariable UUID userId){
-//        return ResponseEntity.ok(recommendationService.getRandomTransactionAmount(userId));
-//    }
 }

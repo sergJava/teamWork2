@@ -13,11 +13,9 @@ import java.util.UUID;
 @Service
 public class RecommendationService {
     private final List<RecommendationRule> recommendationRules;
-//    private final ProductRepository productRepository;
 
     public RecommendationService(List<RecommendationRule> recommendationRules) {
         this.recommendationRules = recommendationRules;
-//        this.productRepository = productRepository;
     }
 
     public RecommendationResponse getRecommendations(UUID userId) {
@@ -28,8 +26,4 @@ public class RecommendationService {
                 .toList();
         return new RecommendationResponse(userId, recommendations);
     }
-
-//    public int getRandomTransactionAmount(UUID userId){
-//        return productRepository.getRandomTransactionAmount(userId);
-//    }
 }
