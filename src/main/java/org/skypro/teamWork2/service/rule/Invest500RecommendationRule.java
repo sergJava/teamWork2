@@ -1,8 +1,8 @@
 package org.skypro.teamWork2.service.rule;
 
 import org.skypro.teamWork2.model.enums.RecommendedProduct;
+import org.skypro.teamWork2.model.enums.TransactionType;
 import org.skypro.teamWork2.repository.ProductRepository;
-import org.skypro.teamWork2.model.ProductDescriptions;
 import org.skypro.teamWork2.model.ProductRecommendation;
 import org.skypro.teamWork2.model.enums.ProductType;
 import org.slf4j.Logger;
@@ -24,9 +24,9 @@ public class Invest500RecommendationRule implements RecommendationRule {
     @Override
     public Optional<ProductRecommendation> check(UUID userId) {
         logger.debug("Checking Invest500 rule for user: {}", userId);
-        boolean usesDebit = productRepository.userHasProductOfType(userId, ProductType.DEBIT);
-        boolean usesInvest = productRepository.userHasProductOfType(userId, ProductType.INVEST);
-        BigDecimal savingDeposits = productRepository.getTotalDepositsByProductType(userId, ProductType.SAVING);
+        boolean usesDebit = productRepository.isUserOfProductType(userId, ProductType.DEBIT);
+        boolean usesInvest = productRepository.isUserOfProductType(userId, ProductType.INVEST);
+        BigDecimal savingDeposits = productRepository.sunAmountsForUserAndType(userId, ProductType.SAVING, TransactionType.DEPOSIT);
 
         if(usesDebit && !usesInvest && savingDeposits.compareTo(new BigDecimal(1000))>0){
             logger.info("Recommending Invest500 for user: {}", userId);

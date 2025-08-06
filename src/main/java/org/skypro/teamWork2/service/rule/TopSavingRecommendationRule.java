@@ -3,6 +3,7 @@ package org.skypro.teamWork2.service.rule;
 import org.skypro.teamWork2.model.ProductRecommendation;
 import org.skypro.teamWork2.model.enums.ProductType;
 import org.skypro.teamWork2.model.enums.RecommendedProduct;
+import org.skypro.teamWork2.model.enums.TransactionType;
 import org.skypro.teamWork2.repository.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +26,11 @@ public class TopSavingRecommendationRule implements RecommendationRule {
     @Override
     public Optional<ProductRecommendation> check(UUID userId) {
         logger.debug("Checking TopSaving rule for user: {}", userId);
-        boolean usesDebit = productRepository.userHasProductOfType(userId, ProductType.DEBIT);
-        BigDecimal debitDeposits = productRepository.getTotalDepositsByProductType(userId, ProductType.DEBIT);
-        BigDecimal savingDeposits = productRepository.getTotalDepositsByProductType(userId, ProductType.SAVING);
-        BigDecimal debitExpenses = productRepository.getTotalExpensesByProductType(userId, ProductType.DEBIT);
+        boolean usesDebit = productRepository.isUserOfProductType(userId, ProductType.DEBIT);
+        BigDecimal debitDeposits = productRepository.sunAmountsForUserAndType(userId, ProductType.DEBIT, TransactionType.DEPOSIT);
+        BigDecimal savingDeposits = productRepository.sunAmountsForUserAndType(userId, ProductType.SAVING, TransactionType.DEPOSIT);
+        BigDecimal debitExpenses = productRepository.sunAmountsForUserAndType(userId, ProductType.DEBIT, TransactionType.WITHDRAW);
+//        BigDecimal debitExpenses = productRepository.getTotalExpensesByProductType(userId, ProductType.DEBIT);
 
         boolean condition1 = debitDeposits.compareTo(MIN_DEPOSIT_THRESHOLD)>=0 ||
                 savingDeposits.compareTo(MIN_DEPOSIT_THRESHOLD)>=0;

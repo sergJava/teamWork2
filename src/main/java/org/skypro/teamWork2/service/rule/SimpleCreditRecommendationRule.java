@@ -3,6 +3,7 @@ package org.skypro.teamWork2.service.rule;
 import org.skypro.teamWork2.model.ProductRecommendation;
 import org.skypro.teamWork2.model.enums.ProductType;
 import org.skypro.teamWork2.model.enums.RecommendedProduct;
+import org.skypro.teamWork2.model.enums.TransactionType;
 import org.skypro.teamWork2.repository.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +26,10 @@ public class SimpleCreditRecommendationRule implements RecommendationRule {
     @Override
     public Optional<ProductRecommendation> check(UUID userId) {
         logger.debug("Checking SimpleCredit rule for user: {}", userId);
-        boolean usesCredit = productRepository.userHasProductOfType(userId, ProductType.CREDIT);
-        BigDecimal debitDeposits = productRepository.getTotalDepositsByProductType(userId, ProductType.DEBIT);
-        BigDecimal debitExpenses = productRepository.getTotalExpensesByProductType(userId, ProductType.DEBIT);
+        boolean usesCredit = productRepository.isUserOfProductType(userId, ProductType.CREDIT);
+        BigDecimal debitDeposits = productRepository.sunAmountsForUserAndType(userId, ProductType.DEBIT, TransactionType.DEPOSIT);
+        BigDecimal debitExpenses = productRepository.sunAmountsForUserAndType(userId, ProductType.DEBIT, TransactionType.WITHDRAW);
+//        BigDecimal debitExpenses = productRepository.getTotalExpensesByProductType(userId, ProductType.DEBIT);
 
         boolean condition1 = debitDeposits.compareTo(debitExpenses)>0;
         boolean condition2 = debitDeposits.compareTo(MIN_DEPOSIT_THRESHOLD)>=0;

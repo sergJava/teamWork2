@@ -25,7 +25,7 @@ public class ProductRepository {
         return result != null ? result : 0;
     }
 
-    public boolean userHasProductOfType(UUID userId, ProductType productType) {
+    public boolean isUserOfProductType(UUID userId, ProductType productType) {
         String sql = """
                 SELECT COUNT(*) > 0
                 FROM transactions t
@@ -39,23 +39,13 @@ public class ProductRepository {
         );
     }
 
-    public BigDecimal getTotalDepositsByProductType(UUID userId, ProductType productType) {
+    public BigDecimal sunAmountsForUserAndType(UUID userId, ProductType productType, TransactionType transactionType) {
         String sql = """
                 SELECT COALESCE(SUM(t.amount), 0)
                 FROM transactions t
                 INNER JOIN products p ON t.product_id = p.id
                 WHERE t.user_id = ? AND p.type = ? AND t.type = ?
                 """;
-        return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId, productType.getDbValue(), TransactionType.DEPOSIT.getDbValue());
-    }
-
-    public BigDecimal getTotalExpensesByProductType(UUID userId, ProductType productType) {
-        String sql = """
-                SELECT COALESCE(SUM(t.amount), 0)
-                FROM transactions t
-                INNER JOIN products p ON t.product_id = p.id
-                WHERE t.user_id = ? AND p.type = ? AND t.type = ?
-                """;
-        return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId, productType.getDbValue(), TransactionType.WITHDRAW.getDbValue());
+        return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId, productType.getDbValue(), transactionType.getDbValue());
     }
 }
