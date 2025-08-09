@@ -1,7 +1,6 @@
 package org.skypro.teamWork2.service;
 
-import org.skypro.teamWork2.service.rule.RecommendationRule;
-import org.skypro.teamWork2.repository.ProductRepository;
+import org.skypro.teamWork2.service.rule.RecommendationRuleSet;
 import org.skypro.teamWork2.model.ProductRecommendation;
 import org.skypro.teamWork2.model.RecommendationResponse;
 import org.springframework.stereotype.Service;
@@ -12,9 +11,9 @@ import java.util.UUID;
 
 @Service
 public class RecommendationService {
-    private final List<RecommendationRule> recommendationRules;
+    private final List<RecommendationRuleSet> recommendationRules;
 
-    public RecommendationService(List<RecommendationRule> recommendationRules) {
+    public RecommendationService(List<RecommendationRuleSet> recommendationRules) {
         this.recommendationRules = recommendationRules;
     }
 

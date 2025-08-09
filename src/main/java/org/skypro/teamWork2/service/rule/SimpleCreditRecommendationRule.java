@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class SimpleCreditRecommendationRule implements RecommendationRule {
+public class SimpleCreditRecommendationRule implements RecommendationRuleSet {
     private static final Logger logger = LoggerFactory.getLogger(SimpleCreditRecommendationRule.class);
     private final ProductRepository productRepository;
     private static final BigDecimal MIN_DEPOSIT_THRESHOLD = new BigDecimal("100000");
@@ -27,8 +27,8 @@ public class SimpleCreditRecommendationRule implements RecommendationRule {
     public Optional<ProductRecommendation> check(UUID userId) {
         logger.debug("Checking SimpleCredit rule for user: {}", userId);
         boolean usesCredit = productRepository.isUserOfProductType(userId, ProductType.CREDIT);
-        BigDecimal debitDeposits = productRepository.sunAmountsForUserAndType(userId, ProductType.DEBIT, TransactionType.DEPOSIT);
-        BigDecimal debitExpenses = productRepository.sunAmountsForUserAndType(userId, ProductType.DEBIT, TransactionType.WITHDRAW);
+        BigDecimal debitDeposits = productRepository.sumAmountsForUserAndType(userId, ProductType.DEBIT, TransactionType.DEPOSIT);
+        BigDecimal debitExpenses = productRepository.sumAmountsForUserAndType(userId, ProductType.DEBIT, TransactionType.WITHDRAW);
 //        BigDecimal debitExpenses = productRepository.getTotalExpensesByProductType(userId, ProductType.DEBIT);
 
         boolean condition1 = debitDeposits.compareTo(debitExpenses)>0;

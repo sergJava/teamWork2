@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class Invest500RecommendationRule implements RecommendationRule {
+public class Invest500RecommendationRule implements RecommendationRuleSet {
     private static final Logger logger = LoggerFactory.getLogger(Invest500RecommendationRule.class);
     private final ProductRepository productRepository;
 
@@ -26,7 +26,7 @@ public class Invest500RecommendationRule implements RecommendationRule {
         logger.debug("Checking Invest500 rule for user: {}", userId);
         boolean usesDebit = productRepository.isUserOfProductType(userId, ProductType.DEBIT);
         boolean usesInvest = productRepository.isUserOfProductType(userId, ProductType.INVEST);
-        BigDecimal savingDeposits = productRepository.sunAmountsForUserAndType(userId, ProductType.SAVING, TransactionType.DEPOSIT);
+        BigDecimal savingDeposits = productRepository.sumAmountsForUserAndType(userId, ProductType.SAVING, TransactionType.DEPOSIT);
 
         if(usesDebit && !usesInvest && savingDeposits.compareTo(new BigDecimal(1000))>0){
             logger.info("Recommending Invest500 for user: {}", userId);

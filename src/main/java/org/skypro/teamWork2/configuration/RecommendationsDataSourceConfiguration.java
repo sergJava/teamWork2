@@ -13,6 +13,8 @@ import javax.sql.DataSource;
 
 @Configuration
 public class RecommendationsDataSourceConfiguration {
+
+    // Конфигурация для базы рекомендаций (H2)
     @Bean(name = "recommendationsDataSource")
     public DataSource recommendationsDataSource(
             @Value("${application.recommendations-db.url}") String recommendationsUrl,
@@ -31,6 +33,7 @@ public class RecommendationsDataSourceConfiguration {
         return new JdbcTemplate(dataSource);
     }
 
+    // Конфигурация для основной базы (PostgreSQL)
     @Primary
     @Bean(name = "defaultDataSource")
     public DataSource defaultDataSource(DataSourceProperties properties) {

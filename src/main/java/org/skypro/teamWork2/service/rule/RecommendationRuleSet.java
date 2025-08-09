@@ -5,6 +5,6 @@ import org.skypro.teamWork2.model.ProductRecommendation;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface RecommendationRule {
+public interface RecommendationRuleSet {
     Optional<ProductRecommendation> check(UUID userId);
 }

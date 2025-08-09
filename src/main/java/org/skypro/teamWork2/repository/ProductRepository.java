@@ -39,7 +39,16 @@ public class ProductRepository {
         );
     }
 
-    public BigDecimal sunAmountsForUserAndType(UUID userId, ProductType productType, TransactionType transactionType) {
+    public boolean isActiveUserOfProductType(UUID userId, ProductType productType) {
+        String sql = """
+                SELECT COUNT(*) >= 5 FROM transactions t
+                INNER JOIN products p ON t.product = p.id
+                WHERE t.user_id = ? AND p.type = ?
+                """;
+        return jdbcTemplate.queryForObject(sql, Boolean.class, userId, productType.name());
+    }
+
+    public BigDecimal sumAmountsForUserAndType(UUID userId, ProductType productType, TransactionType transactionType) {
         String sql = """
                 SELECT COALESCE(SUM(t.amount), 0)
                 FROM transactions t
