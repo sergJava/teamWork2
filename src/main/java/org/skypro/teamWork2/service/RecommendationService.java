@@ -1,7 +1,7 @@
 package org.skypro.teamWork2.service;
 
 import org.skypro.teamWork2.service.rule.RecommendationRuleSet;
-import org.skypro.teamWork2.model.ProductRecommendation;
+import org.skypro.teamWork2.model.Recommendation;
 import org.skypro.teamWork2.model.RecommendationResponse;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class RecommendationService {
     }
 
     public RecommendationResponse getRecommendations(UUID userId) {
-        List<ProductRecommendation> recommendations = recommendationRules.stream()
+        List<Recommendation> recommendations = recommendationRules.stream()
                 .map(rule -> rule.check(userId))
                 .filter(Optional::isPresent)
                 .map(Optional::get)

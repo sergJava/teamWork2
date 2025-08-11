@@ -1,9 +1,9 @@
-package org.skypro.teamWork2.service.rule;
+package org.skypro.teamWork2.util;
 
 import org.skypro.teamWork2.repository.RecommendationsRepository;
 
 import java.util.UUID;
 
-public interface Rule {
+public interface QueryEvaluator {
     boolean evaluate(UUID userId, RecommendationsRepository repository);
 }

@@ -10,10 +10,10 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Repository
-public class ProductRepository {
+public class RecommendationsRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public ProductRepository(@Qualifier("recommendationsJdbcTemplate") JdbcTemplate jdbcTemplate) {
+    public RecommendationsRepository(@Qualifier("recommendationsJdbcTemplate") JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
