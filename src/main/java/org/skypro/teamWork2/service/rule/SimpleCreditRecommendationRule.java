@@ -29,7 +29,6 @@ public class SimpleCreditRecommendationRule implements RecommendationRuleSet {
         boolean usesCredit = recommendationsRepository.isUserOfProductType(userId, ProductType.CREDIT);
         BigDecimal debitDeposits = recommendationsRepository.sumAmountsForUserAndType(userId, ProductType.DEBIT, TransactionType.DEPOSIT);
         BigDecimal debitExpenses = recommendationsRepository.sumAmountsForUserAndType(userId, ProductType.DEBIT, TransactionType.WITHDRAW);
-//        BigDecimal debitExpenses = productRepository.getTotalExpensesByProductType(userId, ProductType.DEBIT);
 
         boolean condition1 = debitDeposits.compareTo(debitExpenses)>0;
         boolean condition2 = debitDeposits.compareTo(MIN_DEPOSIT_THRESHOLD)>=0;
