@@ -1,5 +1,6 @@
 package org.skypro.teamWork2.service;
 
+import jakarta.transaction.Transactional;
 import org.skypro.teamWork2.entity.DynamicRecommendationQueryEntity;
 import org.skypro.teamWork2.entity.DynamicRecommendationRuleEntity;
 import org.skypro.teamWork2.model.DynamicRecommendationRule;
@@ -9,10 +10,13 @@ import org.skypro.teamWork2.repository.DynamicRecommendationRuleRepository;
 import org.skypro.teamWork2.repository.RecommendationsRepository;
 import org.skypro.teamWork2.util.QueryEvaluator;
 import org.skypro.teamWork2.util.QueryEvaluatorFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Service
+@Transactional
 public class DynamicRulesService {
     private final DynamicRecommendationRuleRepository ruleRepository;
     private final RecommendationsRepository recommendationsRepository;
