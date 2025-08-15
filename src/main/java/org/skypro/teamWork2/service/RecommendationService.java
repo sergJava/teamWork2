@@ -22,7 +22,7 @@ public class RecommendationService {
     public RecommendationResponse getRecommendations(UUID userId) {
         List<Recommendation> recommendations = new ArrayList<>();
         staticRules.forEach(rule -> rule.check(userId).ifPresent(recommendations::add));
-//        recommendations.addAll(dynamicRulesService.checkDynamicRules(userId));
+        recommendations.addAll(dynamicRulesService.checkDynamicRules(userId));
         return new RecommendationResponse(userId, recommendations);
     }
 }
