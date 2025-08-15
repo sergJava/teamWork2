@@ -28,7 +28,7 @@ public class RecommendationsRepository {
     public boolean isUserOfProductType(UUID userId, ProductType productType) {
         String sql = """
                 SELECT COUNT(*) > 0
-                FROM transactions t
+                FROM TRANSACTIONS t
                 INNER JOIN products p ON t.product_id = p.id
                 WHERE t.user_id = ? AND p.type = ?
                 """;
@@ -41,7 +41,7 @@ public class RecommendationsRepository {
 
     public boolean isActiveUserOfProductType(UUID userId, ProductType productType) {
         String sql = """
-                SELECT COUNT(*) >= 5 FROM transactions t
+                SELECT COUNT(*) >= 5 FROM TRANSACTIONS t
                 INNER JOIN products p ON t.product = p.id
                 WHERE t.user_id = ? AND p.type = ?
                 """;
@@ -51,7 +51,7 @@ public class RecommendationsRepository {
     public BigDecimal sumAmountsForUserAndType(UUID userId, ProductType productType, TransactionType transactionType) {
         String sql = """
                 SELECT COALESCE(SUM(t.amount), 0)
-                FROM transactions t
+                FROM TRANSACTIONS t
                 INNER JOIN products p ON t.product_id = p.id
                 WHERE t.user_id = ? AND p.type = ? AND t.type = ?
                 """;
