@@ -32,9 +32,9 @@ public class DynamicRecommendationRuleController {
         return new ResponseWrapper(dynamicRulesService.getAllRules());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteRule(@PathVariable long id) {
-        dynamicRulesService.deleteRule(id);
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Object> deleteRule(@PathVariable UUID productId) {
+        dynamicRulesService.deleteRule(productId);
         return ResponseEntity.noContent().build();
     }
 

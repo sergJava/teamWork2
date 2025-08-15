@@ -42,7 +42,7 @@ public class RecommendationsRepository {
     public boolean isActiveUserOfProductType(UUID userId, ProductType productType) {
         String sql = """
                 SELECT COUNT(*) >= 5 FROM TRANSACTIONS t
-                INNER JOIN products p ON t.product = p.id
+                INNER JOIN products p ON t.product_id = p.id
                 WHERE t.user_id = ? AND p.type = ?
                 """;
         return jdbcTemplate.queryForObject(sql, Boolean.class, userId, productType.name());

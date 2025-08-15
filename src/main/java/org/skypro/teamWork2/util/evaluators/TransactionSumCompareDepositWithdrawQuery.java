@@ -20,7 +20,7 @@ public class TransactionSumCompareDepositWithdrawQuery implements QueryEvaluator
             throw new IllegalArgumentException("TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW query expects 2 arguments");
         }
         this.productType = ProductType.valueOf(arguments.get(0));
-        this.operator = ComparisonOperator.valueOf(arguments.get(1));
+        this.operator = ComparisonOperator.fromSymbol(arguments.get(1));
         this.shouldNegate = shouldNegate;
     }
 

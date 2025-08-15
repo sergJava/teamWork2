@@ -53,8 +53,8 @@ public class DynamicRulesService {
                 .toList();
     }
 
-    public void deleteRule(long id) {
-        ruleRepository.deleteById(id);
+    public void deleteRule(UUID productId) {
+        ruleRepository.deleteByProductId(productId);
     }
 
     public List<Recommendation> checkDynamicRules(UUID userId) {
