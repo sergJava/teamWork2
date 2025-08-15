@@ -1,11 +1,16 @@
 package org.skypro.teamWork2.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.skypro.teamWork2.model.enums.QueryType;
 
 import java.util.List;
 
 public record DynamicRecommendationQuery(
-        QueryType queryType,
-        List<String> arguments,
-        boolean negate
+        @JsonProperty("query") QueryType queryType,
+        @JsonProperty("arguments") List<String> arguments,
+        @JsonProperty("negate") boolean negate
+
+//        QueryType queryType,
+//        List<String> arguments,
+//        boolean negate
 ) {}

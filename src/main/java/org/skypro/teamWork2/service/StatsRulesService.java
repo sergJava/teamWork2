@@ -25,4 +25,6 @@ public class StatsRulesService {
                 .toList();
         return new RecommendationResponse(userId, recommendations);
     }
+
+//    public  getStats
 }

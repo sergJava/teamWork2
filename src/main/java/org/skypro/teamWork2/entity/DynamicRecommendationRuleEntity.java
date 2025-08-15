@@ -22,8 +22,7 @@ public class DynamicRecommendationRuleEntity {
     @Column(name = "product_id", nullable = false)
     private UUID productId;
 
-    @Column(name = "product_text", nullable = false)
-    @Lob
+    @Column(name = "product_text", nullable = false, columnDefinition = "text")
     private String productText;
 
     @Column(name = "hit_count", nullable = false)

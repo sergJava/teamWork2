@@ -12,10 +12,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/recommendation")
-public class RecomendationsController {
+public class RecommendationsController {
     private final RecommendationService recommendationService;
 
-    public RecomendationsController(RecommendationService recommendationService) {
+    public RecommendationsController(RecommendationService recommendationService) {
         this.recommendationService = recommendationService;
     }
 

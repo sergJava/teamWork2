@@ -1,5 +1,7 @@
 package org.skypro.teamWork2.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.swing.*;
 import java.util.List;
 import java.util.UUID;
@@ -9,5 +11,5 @@ public record DynamicRecommendationRule(
         String productName,
         UUID productId,
         String productText,
-        List<DynamicRecommendationQuery> queries
+        @JsonProperty("rule") List<DynamicRecommendationQuery> queries
 ) {}
