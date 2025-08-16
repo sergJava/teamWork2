@@ -36,6 +36,7 @@ public class SimpleCreditRecommendationRule implements RecommendationRule {
             return Optional.of(RecommendedProduct.SIMPLE_CREDIT.getDto());
         }
         return Optional.empty();
+
     }
 
 }
