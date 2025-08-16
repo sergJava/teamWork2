@@ -10,10 +10,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class StatsRulesService {
+public class StaticRulesService {
     private final List<RecommendationRuleSet> recommendationRules;
 
-    public StatsRulesService(List<RecommendationRuleSet> recommendationRules) {
+    public StaticRulesService(List<RecommendationRuleSet> recommendationRules) {
         this.recommendationRules = recommendationRules;
     }
 
@@ -26,5 +26,4 @@ public class StatsRulesService {
         return new RecommendationResponse(userId, recommendations);
     }
 
-//    public  getStats
 }

@@ -4,22 +4,21 @@ import org.skypro.teamWork2.model.DynamicRecommendationRule;
 import org.skypro.teamWork2.model.DynamicRecommendationRuleIn;
 import org.skypro.teamWork2.model.ResponseWrapper;
 import org.skypro.teamWork2.service.DynamicRulesService;
-import org.skypro.teamWork2.service.StatsRulesService;
+import org.skypro.teamWork2.service.StaticRulesService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/rule")
 public class DynamicRecommendationRuleController {
     private final DynamicRulesService dynamicRulesService;
-    private final StatsRulesService statsRulesService;
+    private final StaticRulesService staticRulesService;
 
-    public DynamicRecommendationRuleController(DynamicRulesService dynamicRulesService, StatsRulesService statsRulesService) {
+    public DynamicRecommendationRuleController(DynamicRulesService dynamicRulesService, StaticRulesService staticRulesService) {
         this.dynamicRulesService = dynamicRulesService;
-        this.statsRulesService = statsRulesService;
+        this.staticRulesService = staticRulesService;
     }
 
     @PostMapping
