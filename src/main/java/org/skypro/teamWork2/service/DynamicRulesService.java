@@ -27,8 +27,6 @@ public class DynamicRulesService {
     }
 
     public DynamicRecommendationRule createRule(DynamicRecommendationRuleIn ruleIn) {
-//        System.out.println("Input productId: " + ruleIn.productId());
-//        System.out.println("Type: " + ruleIn.productId().getClass());
 
         DynamicRecommendationRuleEntity entity = new DynamicRecommendationRuleEntity();
         entity.setProductName(ruleIn.productName());
@@ -53,7 +51,7 @@ public class DynamicRulesService {
                 .toList();
     }
 
-    public void deleteRule(UUID productId) {
+    public void deleteRuleByProductId(UUID productId) {
         ruleRepository.deleteByProductId(productId);
     }
 

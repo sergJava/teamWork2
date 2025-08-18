@@ -5,6 +5,7 @@ import org.skypro.teamWork2.model.DynamicRecommendationRuleIn;
 import org.skypro.teamWork2.model.ResponseWrapper;
 import org.skypro.teamWork2.service.DynamicRulesService;
 import org.skypro.teamWork2.service.StaticRulesService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,13 +33,9 @@ public class DynamicRecommendationRuleController {
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Object> deleteRule(@PathVariable UUID productId) {
-        dynamicRulesService.deleteRule(productId);
+    public ResponseEntity<Object> deleteRuleByProductId(@PathVariable UUID productId) {
+        dynamicRulesService.deleteRuleByProductId(productId);
         return ResponseEntity.noContent().build();
     }
 
-//    @GetMapping("/stats")
-//    public ResponseWrapper getRulesStats() {
-//        return new ResponseWrapper(statsRulesService.)
-//    }
 }

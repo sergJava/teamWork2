@@ -1,5 +1,7 @@
 package org.skypro.teamWork2.repository;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import org.skypro.teamWork2.model.enums.ProductType;
 import org.skypro.teamWork2.model.enums.TransactionType;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -8,14 +10,27 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Repository
 public class RecommendationsRepository {
     private final JdbcTemplate jdbcTemplate;
 
+    private final Cache<CacheKey, Boolean> userProductTypeCache = Caffeine.newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .maximumSize(10_000)
+            .build();
+
+    private final Cache<CacheKey, BigDecimal> transactionSumCache = Caffeine.newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .maximumSize(10_000)
+            .build();
+
     public RecommendationsRepository(@Qualifier("recommendationsJdbcTemplate") JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
+    private record CacheKey(UUID userId, String arg1, String arg2) {}
 
     public int getRandomTransactionAmount(UUID user) {
         Integer result = jdbcTemplate.queryForObject(
@@ -26,17 +41,22 @@ public class RecommendationsRepository {
     }
 
     public boolean isUserOfProductType(UUID userId, ProductType productType) {
-        String sql = """
+        CacheKey key = new CacheKey(userId, productType.getDbValue(), null);
+
+        return userProductTypeCache.get(key, k ->{
+            String sql = """
                 SELECT COUNT(*) > 0
                 FROM TRANSACTIONS t
                 INNER JOIN products p ON t.product_id = p.id
                 WHERE t.user_id = ? AND p.type = ?
                 """;
-        return jdbcTemplate.queryForObject(sql,
-                Boolean.class,
-                userId,
-                productType.getDbValue()
-        );
+            return jdbcTemplate.queryForObject(sql,
+                    Boolean.class,
+                    k.userId,
+                    k.arg1
+            );
+        });
+
     }
 
     public boolean isActiveUserOfProductType(UUID userId, ProductType productType) {

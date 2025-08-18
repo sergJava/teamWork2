@@ -21,7 +21,7 @@ public class UserOfQuery implements QueryEvaluator {
 
     @Override
     public boolean evaluate(UUID userId, RecommendationsRepository repository) {
-        boolean result = repository.isActiveUserOfProductType(userId, productType);
+        boolean result = repository.isUserOfProductType(userId, productType);
         return shouldNegate ? !result : result;
     }
 }

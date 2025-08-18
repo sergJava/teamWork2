@@ -8,8 +8,8 @@ import java.util.UUID;
 
 public record DynamicRecommendationRule(
         Long id,
-        String productName,
-        UUID productId,
-        String productText,
+        @JsonProperty("product_name") String productName,
+        @JsonProperty("product_id") UUID productId,
+        @JsonProperty("product_text") String productText,
         @JsonProperty("rule") List<DynamicRecommendationQuery> queries
 ) {}
