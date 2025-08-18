@@ -87,7 +87,7 @@ public class DynamicRecommendationRuleEntity {
         query.setParentRule(this);
     }
 
-    public void removeQuery(DynamicRecommendationQueryEntity query ) {
+    public void removeQuery(DynamicRecommendationQueryEntity query) {
         queries.remove(query);
         query.setParentRule(null);
     }

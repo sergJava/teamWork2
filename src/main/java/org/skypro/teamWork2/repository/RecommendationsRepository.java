@@ -26,11 +26,17 @@ public class RecommendationsRepository {
             .maximumSize(10_000)
             .build();
 
+    private final Cache<CacheKey, Boolean> activeUserProductTypeCache = Caffeine.newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .maximumSize(10_000)
+            .build();
+
     public RecommendationsRepository(@Qualifier("recommendationsJdbcTemplate") JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private record CacheKey(UUID userId, String arg1, String arg2) {}
+    private record CacheKey(UUID userId, String arg1, String arg2) {
+    }
 
     public int getRandomTransactionAmount(UUID user) {
         Integer result = jdbcTemplate.queryForObject(
@@ -43,38 +49,55 @@ public class RecommendationsRepository {
     public boolean isUserOfProductType(UUID userId, ProductType productType) {
         CacheKey key = new CacheKey(userId, productType.getDbValue(), null);
 
-        return userProductTypeCache.get(key, k ->{
+        return userProductTypeCache.get(key, k -> {
             String sql = """
-                SELECT COUNT(*) > 0
-                FROM TRANSACTIONS t
-                INNER JOIN products p ON t.product_id = p.id
-                WHERE t.user_id = ? AND p.type = ?
-                """;
+                    SELECT COUNT(*) > 0
+                    FROM TRANSACTIONS t
+                    INNER JOIN products p ON t.product_id = p.id
+                    WHERE t.user_id = ? AND p.type = ?
+                    """;
             return jdbcTemplate.queryForObject(sql,
                     Boolean.class,
-                    k.userId,
-                    k.arg1
+                    k.userId(),
+                    k.arg1()
             );
         });
 
     }
 
     public boolean isActiveUserOfProductType(UUID userId, ProductType productType) {
-        String sql = """
-                SELECT COUNT(*) >= 5 FROM TRANSACTIONS t
-                INNER JOIN products p ON t.product_id = p.id
-                WHERE t.user_id = ? AND p.type = ?
-                """;
-        return jdbcTemplate.queryForObject(sql, Boolean.class, userId, productType.name());
+        CacheKey key = new CacheKey(userId, productType.getDbValue(), null);
+
+        return activeUserProductTypeCache.get(key, k -> {
+            String sql = """
+                    SELECT COUNT(*) >= 5 FROM TRANSACTIONS t
+                    INNER JOIN products p ON t.product_id = p.id
+                    WHERE t.user_id = ? AND p.type = ?
+                    """;
+            return jdbcTemplate.queryForObject(sql,
+                    Boolean.class,
+                    k.userId(),
+                    k.arg1()
+            );
+        });
     }
 
     public BigDecimal sumAmountsForUserAndType(UUID userId, ProductType productType, TransactionType transactionType) {
-        String sql = """
-                SELECT COALESCE(SUM(t.amount), 0)
-                FROM TRANSACTIONS t
-                INNER JOIN products p ON t.product_id = p.id
-                WHERE t.user_id = ? AND p.type = ? AND t.type = ?
-                """;
-        return jdbcTemplate.queryForObject(sql, BigDecimal.class, userId, productType.getDbValue(), transactionType.getDbValue());
+        CacheKey key = new CacheKey(userId, productType.getDbValue(), transactionType.getDbValue());
+
+        return transactionSumCache.get(key, k -> {
+            String sql = """
+                    SELECT COALESCE(SUM(t.amount), 0)
+                    FROM TRANSACTIONS t
+                    INNER JOIN products p ON t.product_id = p.id
+                    WHERE t.user_id = ? AND p.type = ? AND t.type = ?
+                    """;
+            return jdbcTemplate.queryForObject(sql,
+                    BigDecimal.class,
+                    k.userId(),
+                    k.arg1(),
+                    k.arg2()
+            );
+        });
     }
 }

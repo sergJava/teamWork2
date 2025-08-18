@@ -16,7 +16,7 @@ public class UserOfQuery implements QueryEvaluator {
             throw new IllegalArgumentException("USER_OF query expects 1 argument");
         }
         this.productType = ProductType.valueOf(arguments.get(0));
-        this.shouldNegate = true;
+        this.shouldNegate = shouldNegate;
     }
 
     @Override

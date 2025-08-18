@@ -9,4 +9,5 @@ public record DynamicRecommendationQuery(
         @JsonProperty("query") QueryType queryType,
         @JsonProperty("arguments") List<String> arguments,
         @JsonProperty("negate") boolean negate
-) {}
+) {
+}

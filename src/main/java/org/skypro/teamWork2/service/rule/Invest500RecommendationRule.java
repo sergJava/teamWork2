@@ -21,6 +21,7 @@ public class Invest500RecommendationRule implements RecommendationRuleSet {
     public Invest500RecommendationRule(RecommendationsRepository recommendationsRepository) {
         this.recommendationsRepository = recommendationsRepository;
     }
+
     @Override
     public Optional<Recommendation> check(UUID userId) {
         logger.debug("Checking Invest500 rule for user: {}", userId);
@@ -28,7 +29,7 @@ public class Invest500RecommendationRule implements RecommendationRuleSet {
         boolean usesInvest = recommendationsRepository.isUserOfProductType(userId, ProductType.INVEST);
         BigDecimal savingDeposits = recommendationsRepository.sumAmountsForUserAndType(userId, ProductType.SAVING, TransactionType.DEPOSIT);
 
-        if(usesDebit && !usesInvest && savingDeposits.compareTo(new BigDecimal(1000))>0){
+        if (usesDebit && !usesInvest && savingDeposits.compareTo(new BigDecimal(1000)) > 0) {
             logger.info("Recommending Invest500 for user: {}", userId);
             return Optional.of(RecommendedProduct.INVEST_500.getDto());
         }

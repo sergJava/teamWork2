@@ -45,7 +45,7 @@ public class DynamicRulesService {
         return savedEntity.toDto();
     }
 
-    public List<DynamicRecommendationRule> getAllRules(){
+    public List<DynamicRecommendationRule> getAllRules() {
         return ruleRepository.findAll().stream()
                 .map(DynamicRecommendationRuleEntity::toDto)
                 .toList();
