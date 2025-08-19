@@ -1,9 +1,9 @@
 package org.skypro.teamWork2.service.rule;
 
 import org.skypro.teamWork2.model.enums.RecommendedProduct;
-import org.skypro.teamWork2.repository.ProductRepository;
-import org.skypro.teamWork2.model.ProductDescriptions;
-import org.skypro.teamWork2.model.ProductRecommendation;
+import org.skypro.teamWork2.model.enums.TransactionType;
+import org.skypro.teamWork2.repository.RecommendationsRepository;
+import org.skypro.teamWork2.model.Recommendation;
 import org.skypro.teamWork2.model.enums.ProductType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,21 +14,22 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class Invest500RecommendationRule implements RecommendationRule {
+public class Invest500RecommendationRule implements RecommendationRuleSet {
     private static final Logger logger = LoggerFactory.getLogger(Invest500RecommendationRule.class);
-    private final ProductRepository productRepository;
+    private final RecommendationsRepository recommendationsRepository;
 
-    public Invest500RecommendationRule(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public Invest500RecommendationRule(RecommendationsRepository recommendationsRepository) {
+        this.recommendationsRepository = recommendationsRepository;
     }
-    @Override
-    public Optional<ProductRecommendation> check(UUID userId) {
-        logger.debug("Checking Invest500 rule for user: {}", userId);
-        boolean usesDebit = productRepository.userHasProductOfType(userId, ProductType.DEBIT);
-        boolean usesInvest = productRepository.userHasProductOfType(userId, ProductType.INVEST);
-        BigDecimal savingDeposits = productRepository.getTotalDepositsByProductType(userId, ProductType.SAVING);
 
-        if(usesDebit && !usesInvest && savingDeposits.compareTo(new BigDecimal(1000))>0){
+    @Override
+    public Optional<Recommendation> check(UUID userId) {
+        logger.debug("Checking Invest500 rule for user: {}", userId);
+        boolean usesDebit = recommendationsRepository.isUserOfProductType(userId, ProductType.DEBIT);
+        boolean usesInvest = recommendationsRepository.isUserOfProductType(userId, ProductType.INVEST);
+        BigDecimal savingDeposits = recommendationsRepository.sumAmountsForUserAndType(userId, ProductType.SAVING, TransactionType.DEPOSIT);
+
+        if (usesDebit && !usesInvest && savingDeposits.compareTo(new BigDecimal(1000)) > 0) {
             logger.info("Recommending Invest500 for user: {}", userId);
             return Optional.of(RecommendedProduct.INVEST_500.getDto());
         }

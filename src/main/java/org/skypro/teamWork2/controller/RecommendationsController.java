@@ -12,20 +12,16 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/recommendation")
-public class RecomendationsController {
+public class RecommendationsController {
     private final RecommendationService recommendationService;
 
-    public RecomendationsController(RecommendationService recommendationService) {
+    public RecommendationsController(RecommendationService recommendationService) {
         this.recommendationService = recommendationService;
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<RecommendationResponse> getRecommendations(@PathVariable UUID userId){
+    public ResponseEntity<RecommendationResponse> getRecommendations(@PathVariable UUID userId) {
         return ResponseEntity.ok(recommendationService.getRecommendations(userId));
     }
-
-//    @GetMapping("/get-random-transaction-amount/{userId}")
-//    public ResponseEntity<Integer> getRandomTransactionAmount(@PathVariable UUID userId){
-//        return ResponseEntity.ok(recommendationService.getRandomTransactionAmount(userId));
-//    }
 }
+

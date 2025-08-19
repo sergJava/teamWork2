@@ -1,0 +1,72 @@
+databaseChangeLog:
+  - changeSet:
+      id: v1.0-create-tables
+      author: sfibikh
+      changes:
+        - createTable:
+            tableName: dynamic_recommendation_rule
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: product_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_text
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: hit_count
+                  type: integer
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: dynamic_recommendation_query
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: dynamic_recommendation_rule_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_query_rule
+                    referencedTableName: dynamic_recommendation_rule
+                    referencedColumnNames: id
+              - column:
+                  name: query_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: query_arguments
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: should_negate
+                  type: boolean
+                  defaultValue: false
+                  constraints:
+                    nullable: false
+
