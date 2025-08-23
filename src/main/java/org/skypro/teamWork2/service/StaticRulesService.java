@@ -25,5 +25,4 @@ public class StaticRulesService {
                 .toList();
         return new RecommendationResponse(userId, recommendations);
     }
-
 }
