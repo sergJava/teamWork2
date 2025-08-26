@@ -24,12 +24,12 @@ public class RecommendationsRepository {
             .maximumSize(10_000)
             .build();
 
-    private final Cache<CacheKey, BigDecimal> transactionSumCache = Caffeine.newBuilder()
+    private final Cache<CacheKey, Boolean> activeUserProductTypeCache = Caffeine.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .maximumSize(10_000)
             .build();
 
-    private final Cache<CacheKey, Boolean> activeUserProductTypeCache = Caffeine.newBuilder()
+    private final Cache<CacheKey, BigDecimal> transactionSumCache = Caffeine.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .maximumSize(10_000)
             .build();
@@ -65,7 +65,6 @@ public class RecommendationsRepository {
                     k.arg1()
             );
         });
-
     }
 
     public boolean isActiveUserOfProductType(UUID userId, ProductType productType) {
@@ -116,5 +115,27 @@ public class RecommendationsRepository {
             logger.debug("User not found: {} {} - {}", name, lastName, e.getMessage());
             return null;
         }
+    }
+
+    private void invalidateUserProductTypeCache(){
+        userProductTypeCache.invalidateAll();
+        logger.info("userProductTypeCache cleared");
+    }
+
+    private void invalidateActiveUserProductTypeCache(){
+        activeUserProductTypeCache.invalidateAll();
+        logger.info("activeUserProductTypeCache cleared");
+    }
+
+    private void invalidateTransactionSumCache(){
+        transactionSumCache.invalidateAll();
+        logger.info("transactionSumCache cleared");
+
+    }
+
+    public void invalidateAllCaches(){
+        invalidateUserProductTypeCache();
+        invalidateActiveUserProductTypeCache();
+        invalidateTransactionSumCache();
     }
 }

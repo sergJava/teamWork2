@@ -3,12 +3,13 @@ package org.skypro.teamWork2.controller;
 import org.skypro.teamWork2.model.DynamicRecommendationRule;
 import org.skypro.teamWork2.model.DynamicRecommendationRuleIn;
 import org.skypro.teamWork2.model.ResponseWrapper;
+import org.skypro.teamWork2.model.RuleStat;
 import org.skypro.teamWork2.service.DynamicRulesService;
 import org.skypro.teamWork2.service.StaticRulesService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @RestController
@@ -38,4 +39,8 @@ public class DynamicRecommendationRuleController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/stats")
+    public ResponseEntity<DynamicRulesService.RuleStatsResponse> getStats() {
+        return ResponseEntity.ok(dynamicRulesService.getStats());
+    }
 }

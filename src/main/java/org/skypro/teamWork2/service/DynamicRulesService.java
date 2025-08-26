@@ -6,6 +6,7 @@ import org.skypro.teamWork2.entity.DynamicRecommendationRuleEntity;
 import org.skypro.teamWork2.model.DynamicRecommendationRule;
 import org.skypro.teamWork2.model.DynamicRecommendationRuleIn;
 import org.skypro.teamWork2.model.Recommendation;
+import org.skypro.teamWork2.model.RuleStat;
 import org.skypro.teamWork2.repository.DynamicRecommendationRuleRepository;
 import org.skypro.teamWork2.repository.RecommendationsRepository;
 import org.skypro.teamWork2.util.QueryEvaluator;
@@ -25,6 +26,8 @@ public class DynamicRulesService {
         this.ruleRepository = ruleRepository;
         this.recommendationsRepository = recommendationsRepository;
     }
+
+    private List<RuleStat> stats;
 
     public DynamicRecommendationRule createRule(DynamicRecommendationRuleIn ruleIn) {
 
@@ -83,4 +86,17 @@ public class DynamicRulesService {
         );
         return evaluator.evaluate(userId, recommendationsRepository);
     }
+
+    public RuleStatsResponse getStats() {
+        List<RuleStat> stats = ruleRepository.findAll().stream()
+                .map(rule -> new RuleStat(
+                        rule.getId(),
+                        rule.getHitCount()
+                ))
+                .toList();
+        return new RuleStatsResponse(stats);
+    }
+
+    //record для Response
+    public record RuleStatsResponse(List<RuleStat> stats) {}
 }
