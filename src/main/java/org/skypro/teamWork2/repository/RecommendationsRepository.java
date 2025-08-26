@@ -4,6 +4,8 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.skypro.teamWork2.model.enums.ProductType;
 import org.skypro.teamWork2.model.enums.TransactionType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 @Repository
 public class RecommendationsRepository {
+    private Logger logger = LoggerFactory.getLogger(RecommendationsRepository.class);
     private final JdbcTemplate jdbcTemplate;
 
     private final Cache<CacheKey, Boolean> userProductTypeCache = Caffeine.newBuilder()
@@ -99,5 +102,19 @@ public class RecommendationsRepository {
                     k.arg2()
             );
         });
+    }
+
+    public UUID getUserIdByNameAndLastName(String name, String lastName) {
+        String sql = "SELECT id FROM USERS u WHERE u.first_name = ? AND u.last_name = ?";
+        logger.debug("Searching user: firstName='{}', lastName='{}'", name, lastName);
+
+        try {
+            UUID result = jdbcTemplate.queryForObject(sql, UUID.class, name, lastName);
+            logger.debug("User found: {}", result);
+            return result;
+        } catch (Exception e) {
+            logger.debug("User not found: {} {} - {}", name, lastName, e.getMessage());
+            return null;
+        }
     }
 }

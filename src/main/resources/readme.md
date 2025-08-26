@@ -1,21 +1,15 @@
-spring.datasource.url=
-spring.datasource.username=
-spring.datasource.password=
-telegram.bot.token=
+1. Исправьте SQL-запрос в RecommendationsRepository
+   java
+   public UUID getUserIdByNameAndLastName(String name, String lastName) {
+   String sql = "SELECT id FROM USERS u WHERE u.first_name = ? AND u.last_name = ?";
+   logger.debug("Searching user: firstName='{}', lastName='{}'", name, lastName);
 
-spring.datasource.url=jdbc:postgresql://localhost:5432/telegramDb
-spring.datasource.username=worker
-spring.datasource.password=telegram
-
-# Activating the default profile (local)
-spring.profiles.active=local
-
-spring.liquibase.change-log=classpath:liquibase/changelog-master.yml
-
-# Hibernate ddl auto (create, create-drop, validate, update)
-spring.jpa.hibernate.ddl-auto= update
-
-spring.jpa.show-sql=true
-
-# Token stub (will be redefined by the local profile)
-telegram.bot.token=placeholder-token
+   try {
+   UUID result = jdbcTemplate.queryForObject(sql, UUID.class, name, lastName);
+   logger.debug("User found: {}", result);
+   return result;
+   } catch (Exception e) {
+   logger.debug("User not found: {} {} - {}", name, lastName, e.getMessage());
+   return null;
+   }
+   }
