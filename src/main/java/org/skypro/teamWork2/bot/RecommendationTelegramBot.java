@@ -33,7 +33,7 @@ public class RecommendationTelegramBot implements UpdatesListener {
     private TelegramBot telegramBot;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         telegramBot.setUpdatesListener(this);
     }
 

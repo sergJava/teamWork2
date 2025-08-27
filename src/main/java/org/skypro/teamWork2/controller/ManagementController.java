@@ -28,9 +28,10 @@ public class ManagementController {
     }
 
     @GetMapping("/info")
-    public ServiceInfo getInfo(){
+    public ServiceInfo getServiceInfo() {
         return new ServiceInfo(
-                "Bank product recommendation service",
+                buildProperties.getName(),
+//                "Bank product recommendation service",
                 buildProperties.getVersion()
         );
     }

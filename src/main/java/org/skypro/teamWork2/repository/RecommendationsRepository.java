@@ -117,23 +117,23 @@ public class RecommendationsRepository {
         }
     }
 
-    private void invalidateUserProductTypeCache(){
+    private void invalidateUserProductTypeCache() {
         userProductTypeCache.invalidateAll();
         logger.info("userProductTypeCache cleared");
     }
 
-    private void invalidateActiveUserProductTypeCache(){
+    private void invalidateActiveUserProductTypeCache() {
         activeUserProductTypeCache.invalidateAll();
         logger.info("activeUserProductTypeCache cleared");
     }
 
-    private void invalidateTransactionSumCache(){
+    private void invalidateTransactionSumCache() {
         transactionSumCache.invalidateAll();
         logger.info("transactionSumCache cleared");
 
     }
 
-    public void invalidateAllCaches(){
+    public void invalidateAllCaches() {
         invalidateUserProductTypeCache();
         invalidateActiveUserProductTypeCache();
         invalidateTransactionSumCache();

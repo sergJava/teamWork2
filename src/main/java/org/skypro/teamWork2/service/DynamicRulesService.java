@@ -98,5 +98,6 @@ public class DynamicRulesService {
     }
 
     //record для Response
-    public record RuleStatsResponse(List<RuleStat> stats) {}
+    public record RuleStatsResponse(List<RuleStat> stats) {
+    }
 }
