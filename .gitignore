@@ -32,5 +32,8 @@ build/
 
 ### VS Code ###
 .vscode/
-/transaction.mv.db
-/transaction.trace.db
+transaction.mv.db
+transaction.trace.db
+
+application-local.properties
+
