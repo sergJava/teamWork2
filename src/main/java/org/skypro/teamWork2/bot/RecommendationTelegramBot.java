@@ -37,7 +37,6 @@ public class RecommendationTelegramBot implements UpdatesListener {
         telegramBot.setUpdatesListener(this);
     }
 
-    String messageText;
     Long chatId;
 
     @Override
