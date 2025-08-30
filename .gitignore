@@ -32,5 +32,14 @@ build/
 
 ### VS Code ###
 .vscode/
-/transaction.mv.db
-/transaction.trace.db
+transaction.mv.db
+transaction.trace.db
+
+
+# Игнорируем локальные конфиги
+application-local.properties
+
+# Игнорируем файлы базы данных H2
+*.mv.db
+*.trace.db
+

@@ -4,6 +4,8 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.skypro.teamWork2.model.enums.ProductType;
 import org.skypro.teamWork2.model.enums.TransactionType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 @Repository
 public class RecommendationsRepository {
+    private Logger logger = LoggerFactory.getLogger(RecommendationsRepository.class);
     private final JdbcTemplate jdbcTemplate;
 
     private final Cache<CacheKey, Boolean> userProductTypeCache = Caffeine.newBuilder()
@@ -21,12 +24,12 @@ public class RecommendationsRepository {
             .maximumSize(10_000)
             .build();
 
-    private final Cache<CacheKey, BigDecimal> transactionSumCache = Caffeine.newBuilder()
+    private final Cache<CacheKey, Boolean> activeUserProductTypeCache = Caffeine.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .maximumSize(10_000)
             .build();
 
-    private final Cache<CacheKey, Boolean> activeUserProductTypeCache = Caffeine.newBuilder()
+    private final Cache<CacheKey, BigDecimal> transactionSumCache = Caffeine.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .maximumSize(10_000)
             .build();
@@ -62,7 +65,6 @@ public class RecommendationsRepository {
                     k.arg1()
             );
         });
-
     }
 
     public boolean isActiveUserOfProductType(UUID userId, ProductType productType) {
@@ -99,5 +101,41 @@ public class RecommendationsRepository {
                     k.arg2()
             );
         });
+    }
+
+    public UUID getUserIdByNameAndLastName(String name, String lastName) {
+        String sql = "SELECT id FROM USERS u WHERE u.first_name = ? AND u.last_name = ?";
+        logger.debug("Searching user: firstName='{}', lastName='{}'", name, lastName);
+
+        try {
+            UUID result = jdbcTemplate.queryForObject(sql, UUID.class, name, lastName);
+            logger.debug("User found: {}", result);
+            return result;
+        } catch (Exception e) {
+            logger.debug("User not found: {} {} - {}", name, lastName, e.getMessage());
+            return null;
+        }
+    }
+
+    private void invalidateUserProductTypeCache() {
+        userProductTypeCache.invalidateAll();
+        logger.info("userProductTypeCache cleared");
+    }
+
+    private void invalidateActiveUserProductTypeCache() {
+        activeUserProductTypeCache.invalidateAll();
+        logger.info("activeUserProductTypeCache cleared");
+    }
+
+    private void invalidateTransactionSumCache() {
+        transactionSumCache.invalidateAll();
+        logger.info("transactionSumCache cleared");
+
+    }
+
+    public void invalidateAllCaches() {
+        invalidateUserProductTypeCache();
+        invalidateActiveUserProductTypeCache();
+        invalidateTransactionSumCache();
     }
 }

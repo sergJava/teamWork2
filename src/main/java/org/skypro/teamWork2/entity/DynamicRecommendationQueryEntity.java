@@ -68,7 +68,7 @@ public class DynamicRecommendationQueryEntity {
         this.shouldNegate = shouldNegate;
     }
 
-    public DynamicRecommendationQuery toDto(){
+    public DynamicRecommendationQuery toDto() {
         return new DynamicRecommendationQuery(
                 this.queryType,
                 this.getArguments(),
