@@ -1,6 +1,7 @@
 Диаграмма компонентов:
 
-![Диаграмма компонентов сервиса рекомендаций](./images/architecture-component-diagram.png)
+[Диаграмма компонентов сервиса рекомендаций - получение рекомендаций](./images/architecture-component-diagram-get-recommendations.png)
+[Диаграмма компонентов сервиса рекомендаций - управление динамическими правилами](./images/architecture-component-diagram-managing-dynamic-rules.png)
 
 *   **Внешние системы:** API-клиенты и Telegram Server взаимодействуют с контроллерами по HTTP.
 *   **Базы данных:** H2 используется только для чтения исходных данных, PostgreSQL — для хранения динамических правил.
