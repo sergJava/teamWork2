@@ -31,7 +31,6 @@ public class ManagementController {
     public ServiceInfo getServiceInfo() {
         return new ServiceInfo(
                 buildProperties.getName(),
-//                "Bank product recommendation service",
                 buildProperties.getVersion()
         );
     }
